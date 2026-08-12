@@ -1,0 +1,3 @@
+# The built page travels inside the distribution — that is how a plugin
+# ships a frontend at all.
+recursive-include nl2sql_eda/webdist *

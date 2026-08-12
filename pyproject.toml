@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nl2sql-eda"
+version = "1.0.0"
+description = "EDA for the NL2SQL app: profile, null patterns and charts for any table or query — as a plugin, with zero lines inside the app."
+readme = "README.md"
+requires-python = ">=3.10"
+# No install dependency on the engine, on purpose (the template's rule): this
+# package is installed into the APP's environment, which already provides a
+# core. The real compatibility contract is `requires_core` in the Module
+# declaration — checked against the core's API_VERSION at discovery, and
+# enforced by DISABLING the module with a reason rather than blocking an
+# install. A pip bound here would fight the very upgrades this architecture
+# exists to make safe.
+
+# Installing the package IS the registration. There is no list inside the app.
+[project.entry-points."nl2sql.modules"]
+eda = "nl2sql_eda:MODULE"
+
+# The built page, served by cores that serve plugin pages. Points at a
+# stdlib-only callable: see nl2sql_eda/page.py for why that matters.
+[project.entry-points."nl2sql.pages"]
+eda = "nl2sql_eda.page:page"
+
+[tool.setuptools]
+packages = ["nl2sql_eda"]
+
+# The built page travels inside the wheel (added with the page, later).
+[tool.setuptools.package-data]
+nl2sql_eda = ["webdist/**/*"]
